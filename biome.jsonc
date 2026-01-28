@@ -1,0 +1,87 @@
+{
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "extends": [
+    "ultracite/biome/core",
+    "ultracite/biome/react",
+    "ultracite/biome/next"
+  ],
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true
+  },
+  "files": {
+    "ignoreUnknown": true,
+    "includes": [
+      "!node_modules",
+      "!.next",
+      "!dist",
+      "!build",
+      "!src/components/ui",
+      "!src/styles/globals.css"
+    ]
+  },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "indentWidth": 2
+  },
+  "javascript": {
+    "formatter": {
+      "semicolons": "asNeeded",
+      "trailingCommas": "none",
+      "enabled": true
+    }
+  },
+  "css": {
+    "linter": {
+      "enabled": false
+    }
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true,
+      "suspicious": {
+        "useAwait": "off"
+      },
+      "correctness": {
+        "noUnusedVariables": "off"
+      },
+      "style": {
+        "noUselessElse": "on",
+        "useConsistentTypeDefinitions": {
+          "level": "warn",
+          "fix": "safe",
+          "options": {
+            "style": "type"
+          }
+        }
+      },
+      "nursery": {
+        "useSortedClasses": {
+          "level": "info",
+          "fix": "safe",
+          "options": {
+            "functions": ["clsx", "cva", "cn"]
+          }
+        }
+      }
+    },
+    "domains": {
+      "next": "recommended",
+      "react": "recommended"
+    }
+  },
+  "assist": {
+    "enabled": true,
+    "actions": {
+      "recommended": true,
+      "source": {
+        "organizeImports": "on",
+        "useSortedAttributes": "on",
+        "useSortedProperties": "on"
+      }
+    }
+  }
+}

@@ -1,0 +1,26 @@
+import { relations } from "drizzle-orm"
+import { boolean, pgTable, text, timestamp } from "drizzle-orm/pg-core"
+import { accounts } from "./accounts"
+import { sessions } from "./sessions"
+import { userSettings } from "./user-settings"
+
+export const users = pgTable("users", {
+  id: text("id").primaryKey(),
+  name: text("name").notNull(),
+  email: text("email").notNull().unique(),
+  emailVerified: boolean("email_verified").default(false).notNull(),
+  image: text("image"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at")
+    .defaultNow()
+    .$onUpdate(() => /* @__PURE__ */ new Date())
+    .notNull(),
+  username: text("username").unique(),
+  displayUsername: text("display_username")
+})
+
+export const userRelations = relations(users, ({ many, one }) => ({
+  sessions: many(sessions),
+  accounts: many(accounts),
+  userSettings: one(userSettings)
+}))
