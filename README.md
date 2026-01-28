@@ -24,7 +24,7 @@ A starter template for building authenticated web applications with [Better Auth
 1. **Clone the repo**:
 
    ```bash
-   git clone https://github.com/your-username/your-repo
+   git clone https://github.com/guisarria/boring-template
    cd your-repo
    ```
 

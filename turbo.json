@@ -9,7 +9,6 @@
         "BETTER_AUTH_EMAIL",
         "RESEND_API_KEY",
         "NEXT_PUBLIC_BASE_URL",
-        "VERCEL_URL",
         "GITHUB_CLIENT_ID",
         "GITHUB_CLIENT_SECRET"
       ]
