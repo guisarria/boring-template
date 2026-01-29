@@ -15,8 +15,10 @@ import {
   CardTitle
 } from "@/components/ui/card"
 import { FieldSeparator, FieldSet } from "@/components/ui/field"
+import { cn } from "@/lib/utils"
 import { signUpUser } from "@/server/users"
 import { type SignUpSchema, signUpSchema } from "@/types/sign-up-schema"
+import { buttonVariants } from "../ui/button"
 
 export function SignUpForm() {
   const router = useRouter()
@@ -101,7 +103,13 @@ export function SignUpForm() {
       <CardFooter>
         <div className="flex w-full items-center justify-center gap-x-1 text-center text-xs sm:text-sm">
           <p>Already have an account?</p>
-          <Link className="underline underline-offset-2" href="/sign-in">
+          <Link
+            className={cn(
+              buttonVariants({ variant: "link", size: "xs" }),
+              "px-0"
+            )}
+            href="/sign-in"
+          >
             Sign in
           </Link>
         </div>

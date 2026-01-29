@@ -5,13 +5,13 @@ import { motion } from "motion/react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { GitHubIcon } from "@/components/ui/icons"
-import { HeroArtAsciiBinary } from "./hero-asset-ascii"
+import { HeroAssetAscii } from "./hero-asset-ascii"
 
 export function Hero() {
   return (
     <section
       aria-labelledby="hero-heading"
-      className="relative flex min-h-[90vh] flex-col items-center justify-center overflow-hidden"
+      className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden pb-20"
     >
       <div
         aria-hidden
@@ -39,7 +39,7 @@ export function Hero() {
         </motion.div>
 
         <h1
-          className="max-w-4xl text-center font-serif text-4xl leading-tight tracking-tighter lg:text-7xl"
+          className="max-w-4xl text-center font-serif text-4xl leading-tight tracking-tighter md:text-6xl"
           id="hero-heading"
         >
           <span className="block">Ship faster with</span>
@@ -48,9 +48,9 @@ export function Hero() {
           </span>
         </h1>
 
-        <HeroArtAsciiBinary className="select-none bg-linear-to-r from-orange-400 via-orange-600 to-cyan-800 bg-clip-text text-transparent" />
+        <HeroAssetAscii className="select-none bg-linear-to-r from-orange-400 via-orange-600 to-cyan-800 bg-clip-text text-transparent" />
 
-        <p className="max-w-2xl text-pretty text-center text-lg text-muted-foreground sm:text-xl">
+        <p className="max-w-lg text-pretty px-4 text-center text-md text-muted-foreground md:max-w-3xl md:text-xl">
           A minimal, type-safe Next.js template with authentication, database,
           and email built-in. Start building your product, not your
           infrastructure.

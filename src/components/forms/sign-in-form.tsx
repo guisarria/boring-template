@@ -14,8 +14,10 @@ import {
   CardTitle
 } from "@/components/ui/card"
 import { FieldSeparator, FieldSet } from "@/components/ui/field"
+import { cn } from "@/lib/utils"
 import { signInUser } from "@/server/users"
 import { type SignInSchema, signInSchema } from "@/types/sign-in-schema"
+import { buttonVariants } from "../ui/button"
 
 export function SignInForm() {
   const router = useRouter()
@@ -91,7 +93,10 @@ export function SignInForm() {
         <div className="flex w-full items-center justify-center gap-x-1 text-center text-xs sm:text-sm">
           <p>Don&apos;t have an account?</p>
           <Link
-            className="underline underline-offset-2"
+            className={cn(
+              buttonVariants({ variant: "link", size: "xs" }),
+              "px-0"
+            )}
             href="/sign-up"
             prefetch
           >
