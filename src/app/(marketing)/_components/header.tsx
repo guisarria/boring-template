@@ -2,11 +2,11 @@ import { EyeClosed } from "lucide-react"
 import Link from "next/link"
 import { Suspense } from "react"
 import { SignInButton } from "@/components/forms/sign-in-button"
-import { ThemeToggle } from "./theme-toggle"
-import { Skeleton } from "./ui/skeleton"
+import { ThemeToggle } from "@/components/theme-toggle"
+import { Skeleton } from "@/components/ui/skeleton"
 
 export const Header = () => (
-  <div className="container flex w-full items-center justify-between py-4">
+  <div className="container flex w-full items-center justify-between px-4 py-4 sm:px-0">
     <Link href="/">
       <EyeClosed className="ml-2 text-cyan-200" />
     </Link>

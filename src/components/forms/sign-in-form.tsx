@@ -13,7 +13,7 @@ import {
   CardHeader,
   CardTitle
 } from "@/components/ui/card"
-import { FieldSet } from "@/components/ui/field"
+import { FieldSeparator, FieldSet } from "@/components/ui/field"
 import { signInUser } from "@/server/users"
 import { type SignInSchema, signInSchema } from "@/types/sign-in-schema"
 
@@ -81,14 +81,14 @@ export function SignInForm() {
               </form.AppField>
 
               <form.SubmitButton>Continue with Email</form.SubmitButton>
-
+              <FieldSeparator />
               <SocialButtons callbackURL="/dashboard" />
             </FieldSet>
           </form>
         </form.AppForm>
       </CardContent>
       <CardFooter>
-        <div className="flex w-full items-center justify-center gap-x-1 text-center text-sm">
+        <div className="flex w-full items-center justify-center gap-x-1 text-center text-xs sm:text-sm">
           <p>Don&apos;t have an account?</p>
           <Link
             className="underline underline-offset-2"

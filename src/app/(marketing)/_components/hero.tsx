@@ -39,7 +39,7 @@ export function Hero() {
         </motion.div>
 
         <h1
-          className="max-w-4xl text-center font-serif text-5xl leading-tight tracking-tighter sm:text-7xl"
+          className="max-w-4xl text-center font-serif text-4xl leading-tight tracking-tighter lg:text-7xl"
           id="hero-heading"
         >
           <span className="block">Ship faster with</span>

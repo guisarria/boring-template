@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { GitHubIcon } from "./ui/icons"
+import { GitHubIcon } from "@/components/ui/icons"
 
 export const Footer = () => (
   <footer className="container z-10 mt-auto flex w-full items-center bg-background py-4 text-muted-foreground text-xs">

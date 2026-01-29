@@ -27,7 +27,7 @@ export function Cta() {
           whileInView="visible"
         >
           <h2
-            className="mb-4 bg-linear-to-r from-orange-400 via-orange-300 to-cyan-400 bg-clip-text font-serif text-5xl text-transparent tracking-tight"
+            className="mb-4 bg-linear-to-r from-orange-400 via-orange-300 to-cyan-400 bg-clip-text font-serif text-4xl text-transparent tracking-tight sm:text-5xl"
             id="cta-heading"
           >
             Ready to build?
@@ -36,7 +36,7 @@ export function Cta() {
             Clone the repository and start shipping in minutes.
           </p>
 
-          <div className="flex w-full max-w-lg items-center gap-2 rounded-lg border border-border bg-muted/50 px-4 py-3 font-mono text-sm">
+          <div className="flex w-full max-w-sm items-center gap-2 rounded-lg border border-border bg-muted/50 px-4 py-3 font-mono text-sm lg:max-w-lg">
             <span aria-hidden className="select-none text-muted-foreground">
               $
             </span>

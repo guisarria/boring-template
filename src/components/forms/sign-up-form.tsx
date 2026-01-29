@@ -14,7 +14,7 @@ import {
   CardHeader,
   CardTitle
 } from "@/components/ui/card"
-import { FieldSet } from "@/components/ui/field"
+import { FieldSeparator, FieldSet } from "@/components/ui/field"
 import { signUpUser } from "@/server/users"
 import { type SignUpSchema, signUpSchema } from "@/types/sign-up-schema"
 
@@ -71,6 +71,7 @@ export function SignUpForm() {
           >
             <FieldSet>
               <SocialButtons />
+              <FieldSeparator />
               <form.AppField name="name">
                 {(field) => (
                   <field.TextField label="Name" placeholder="Enter your name" />
@@ -98,7 +99,7 @@ export function SignUpForm() {
       </CardContent>
 
       <CardFooter>
-        <div className="flex w-full items-center justify-center gap-x-1 text-center text-sm">
+        <div className="flex w-full items-center justify-center gap-x-1 text-center text-xs sm:text-sm">
           <p>Already have an account?</p>
           <Link className="underline underline-offset-2" href="/sign-in">
             Sign in

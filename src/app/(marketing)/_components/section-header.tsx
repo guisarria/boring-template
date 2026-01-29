@@ -22,7 +22,7 @@ export function SectionHeader({
       viewport={{ once: true }}
       whileInView="visible"
     >
-      <h2 className="mb-4 bg-linear-to-r from-orange-400 via-orange-300 to-cyan-400 bg-clip-text font-serif text-5xl text-transparent tracking-tight">
+      <h2 className="mb-4 bg-linear-to-r from-orange-400 via-orange-300 to-cyan-400 bg-clip-text font-serif text-4xl text-transparent tracking-tight sm:text-5xl">
         {title}
       </h2>
       <p className="mx-auto max-w-xl text-muted-foreground">{description}</p>

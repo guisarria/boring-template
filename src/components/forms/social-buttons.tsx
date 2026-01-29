@@ -28,22 +28,12 @@ export function SocialButtons({
   }
 
   return (
-    <div className="flex gap-2">
-      <Button
-        className="flex-1"
-        onClick={signInGitHub}
-        type="button"
-        variant="outline"
-      >
+    <div className="flex flex-col gap-2 sm:flex-row">
+      <Button onClick={signInGitHub} type="button" variant="outline">
         <GitHubIcon />
         Continue with GitHub
       </Button>
-      <Button
-        className="flex-1"
-        onClick={signInGoogle}
-        type="button"
-        variant="outline"
-      >
+      <Button onClick={signInGoogle} type="button" variant="outline">
         <GoogleIcon />
         Continue with Google
       </Button>

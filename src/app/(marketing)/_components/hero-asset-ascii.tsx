@@ -235,7 +235,7 @@ export const HeroArtAsciiBinary = ({ className }: { className: string }) => {
   return (
     <pre
       className={cn(
-        "font-black font-mono text-[#DA702C] text-[5px] leading-none -tracking-widest",
+        "font-black font-mono text-[#DA702C] text-[3px] leading-none -tracking-widest lg:text-[5px]",
         className
       )}
     >
