@@ -3,7 +3,7 @@ import { SignInForm } from "@/components/forms/sign-in-form"
 
 export default function Page() {
   return (
-    <div className="flex h-full flex-col items-center justify-center pb-12">
+    <div className="flex h-full w-full flex-col items-center justify-center px-4 pb-12">
       <Suspense>
         <SignInForm />
       </Suspense>

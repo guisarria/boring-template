@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import { useAppForm } from "@/components/forms/form-context"
 import { PasswordFieldGroup } from "@/components/forms/password-field-group"
-import { SocialButtons } from "@/components/forms/social-auth-buttons"
+import { SocialAuthButtons } from "@/components/forms/social-auth-buttons"
 import {
   Card,
   CardContent,
@@ -72,7 +72,7 @@ export function SignUpForm() {
             }}
           >
             <FieldSet>
-              <SocialButtons />
+              <SocialAuthButtons />
               <FieldSeparator />
               <form.AppField name="name">
                 {(field) => (

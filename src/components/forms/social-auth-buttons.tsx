@@ -6,11 +6,11 @@ import { useMemo } from "react"
 import { OAUTH_PROVIDERS } from "@/lib/auth/o-auth-providers"
 import { BetterAuthActionButton } from "../better-auth-action-button"
 
-export function SocialButtons() {
+export function SocialAuthButtons() {
   const authClient = useMemo(() => createAuthClient(), [])
 
   return (
-    <div className="flex w-md flex-col items-center justify-center gap-2 sm:flex-row">
+    <div className="flex flex-col items-center justify-center gap-2 sm:flex-row">
       {OAUTH_PROVIDERS.map(({ id, name, Icon }) => (
         <BetterAuthActionButton
           action={() =>

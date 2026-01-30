@@ -4,7 +4,7 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import { useAppForm } from "@/components/forms/form-context"
-import { SocialButtons } from "@/components/forms/social-auth-buttons"
+import { SocialAuthButtons } from "@/components/forms/social-auth-buttons"
 import {
   Card,
   CardContent,
@@ -47,13 +47,14 @@ export function SignInForm() {
   })
 
   return (
-    <Card>
+    <Card className="w-full sm:w-md">
       <CardHeader>
         <CardTitle>Sign in</CardTitle>
         <CardDescription>
           Enter your email and password to sign in
         </CardDescription>
       </CardHeader>
+
       <CardContent>
         <form.AppForm>
           <form
@@ -72,7 +73,6 @@ export function SignInForm() {
                   />
                 )}
               </form.AppField>
-
               <form.AppField name="password">
                 {(field) => (
                   <field.PasswordField
@@ -81,14 +81,14 @@ export function SignInForm() {
                   />
                 )}
               </form.AppField>
-
               <form.SubmitButton>Continue with Email</form.SubmitButton>
               <FieldSeparator />
-              <SocialButtons />
+              <SocialAuthButtons />
             </FieldSet>
           </form>
         </form.AppForm>
       </CardContent>
+
       <CardFooter>
         <div className="flex w-full items-center justify-center gap-x-1 text-center text-xs sm:text-sm">
           <p>Don&apos;t have an account?</p>
