@@ -9,7 +9,9 @@ export const env = createEnv({
     RESEND_API_KEY: z.string(),
     BETTER_AUTH_EMAIL: z.email(),
     GITHUB_CLIENT_ID: z.string(),
-    GITHUB_CLIENT_SECRET: z.string()
+    GITHUB_CLIENT_SECRET: z.string(),
+    GOOGLE_CLIENT_ID: z.string(),
+    GOOGLE_CLIENT_SECRET: z.string()
   },
   client: {
     NEXT_PUBLIC_SERVER_URL: z.string()

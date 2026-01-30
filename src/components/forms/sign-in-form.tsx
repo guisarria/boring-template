@@ -4,7 +4,7 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import { useAppForm } from "@/components/forms/form-context"
-import { SocialButtons } from "@/components/forms/social-buttons"
+import { SocialButtons } from "@/components/forms/social-auth-buttons"
 import {
   Card,
   CardContent,
@@ -84,7 +84,7 @@ export function SignInForm() {
 
               <form.SubmitButton>Continue with Email</form.SubmitButton>
               <FieldSeparator />
-              <SocialButtons callbackURL="/dashboard" />
+              <SocialButtons />
             </FieldSet>
           </form>
         </form.AppForm>
