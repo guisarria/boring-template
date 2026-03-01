@@ -1,3 +1,4 @@
+import type { JSONContent } from "@tiptap/core"
 import { relations, sql } from "drizzle-orm"
 import {
   boolean,
@@ -16,7 +17,7 @@ export const pages = pgTable(
   {
     id: text("id").primaryKey().default(sql`gen_random_uuid()`),
     title: text("title").notNull(),
-    content: jsonb("content").notNull(),
+    content: jsonb("content").$type<JSONContent>().notNull(),
     bookId: text("book_id")
       .notNull()
       .references(() => books.id, { onDelete: "cascade" }),
@@ -43,18 +44,13 @@ export const pageRelations = relations(pages, ({ one }) => ({
 export type Page = typeof pages.$inferSelect
 export type InsertPage = typeof pages.$inferInsert
 
-export const contentSchema = z.record(z.string(), z.unknown()).refine(
-  (value) => {
-    try {
-      JSON.stringify(value)
-      return true
-    } catch {
-      return false
-    }
-  },
-  {
-    message: "Content must be valid JSON",
-  },
+export const contentSchema = z.custom<JSONContent>(
+  (value) =>
+    typeof value === "object" &&
+    value !== null &&
+    "type" in value &&
+    (value as Record<string, unknown>).type === "doc",
+  { message: "Content must be a valid document with type 'doc'" },
 )
 
 export const createPageSchema = z.object({

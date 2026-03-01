@@ -1,7 +1,6 @@
-import type { JSONContent } from "@tiptap/core"
 import { assertSuccess } from "@/core/dal"
 import { getPageById } from "@/modules/pages/actions"
-import { RichTextEditor } from "@/modules/pages/components/rich-text-editor"
+import { RichTextEditor } from "@/modules/pages/components/rich-text-editor/rich-text-editor"
 
 type Params = Promise<{
   pageId: string
@@ -24,7 +23,7 @@ export default async function Page({ params }: { params: Params }) {
     <>
       <h1 className="font-serif text-5xl">{page?.title}</h1>
 
-      <RichTextEditor content={page?.content as JSONContent} pageId={pageId} />
+      <RichTextEditor content={page?.content} pageId={pageId} />
     </>
   )
 }

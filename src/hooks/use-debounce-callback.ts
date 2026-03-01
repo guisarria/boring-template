@@ -1,31 +1,57 @@
 import { useCallback, useEffect, useRef } from "react"
 
-export const useDebounceCallback = <T extends (...args: unknown[]) => void>(
-  callback: T,
+export function useDebounceCallback<Args extends unknown[]>(
+  callback: (...args: Args) => unknown,
   delay = 500,
-) => {
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
+) {
+  const callbackRef = useRef(callback)
+  const delayRef = useRef(delay)
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-  const debouncedCallback = useCallback(
-    (...args: Parameters<T>) => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current)
+  const lastArgsRef = useRef<Args | null>(null)
+
+  useEffect(() => {
+    callbackRef.current = callback
+  }, [callback])
+
+  useEffect(() => {
+    delayRef.current = delay
+  }, [delay])
+
+  const cancel = useCallback(() => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current)
+    }
+    timeoutRef.current = null
+    lastArgsRef.current = null
+  }, [])
+
+  const flush = useCallback(() => {
+    const args = lastArgsRef.current
+    if (!args) {
+      return
+    }
+    cancel()
+    callbackRef.current(...args)
+  }, [cancel])
+
+  // Again, just use Args directly
+  const debounced = useCallback((...args: Args) => {
+    lastArgsRef.current = args
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current)
+    }
+    timeoutRef.current = setTimeout(() => {
+      timeoutRef.current = null
+      const a = lastArgsRef.current
+      lastArgsRef.current = null
+      if (a) {
+        callbackRef.current(...a)
       }
-      timeoutRef.current = setTimeout(() => {
-        callback(...args)
-      }, delay)
-    },
-    [callback, delay],
-  )
+    }, delayRef.current)
+  }, [])
 
-  useEffect(
-    () => () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current)
-      }
-    },
-    [],
-  )
+  useEffect(() => cancel, [cancel])
 
-  return debouncedCallback
+  return Object.assign(debounced, { cancel, flush })
 }
