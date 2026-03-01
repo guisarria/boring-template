@@ -112,14 +112,10 @@ export function RichTextEditor({ content, pageId }: RichTextEditorProps) {
     }
   }
 
-  const enqueueSave = (json: JSONContent) => {
-    pendingRef.current = json
+  const debouncedSave = useDebounceCallback((expanded: JSONContent) => {
+    pendingRef.current = expanded
     setStatus("dirty")
     processQueue()
-  }
-
-  const debouncedSave = useDebounceCallback((expanded: JSONContent) => {
-    enqueueSave(expanded)
   }, 2000)
 
   useEffect(() => () => debouncedSave.flush(), [debouncedSave])
