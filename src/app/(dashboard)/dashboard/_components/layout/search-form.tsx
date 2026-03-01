@@ -24,7 +24,7 @@ export function SearchForm({ ...props }: React.ComponentProps<"form">) {
             className="pl-8"
             id="search"
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search your pages..."
+            placeholder="Search your pages…"
             value={search}
           />
           <Search className="pointer-events-none absolute top-1/2 left-2 size-4 -translate-y-1/2 select-none opacity-50" />

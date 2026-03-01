@@ -14,6 +14,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
+import { LoadingSwap } from "@/components/ui/loading-swap"
 import { PasswordInput } from "@/components/ui/password-input"
 import { authClient } from "@/modules/auth/auth-client"
 
@@ -32,6 +33,11 @@ export default function ResetPassword() {
     }
     setIsSubmitting(true)
     setError("")
+    if (password !== confirmPassword) {
+      setError("Passwords do not match")
+      setIsSubmitting(false)
+      return
+    }
     const res = await authClient.resetPassword({
       newPassword: password,
       token,
@@ -55,26 +61,26 @@ export default function ResetPassword() {
           <form onSubmit={handleSubmit}>
             <div className="grid w-full items-center gap-2">
               <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="email">New password</Label>
+                <Label htmlFor="password">New password</Label>
                 <PasswordInput
-                  autoComplete="password"
+                  autoComplete="new-password"
                   id="password"
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                     setPassword(e.target.value)
                   }
-                  placeholder="Password"
+                  placeholder="••••••••"
                   value={password}
                 />
               </div>
               <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="email">Confirm password</Label>
+                <Label htmlFor="confirm-password">Confirm password</Label>
                 <PasswordInput
-                  autoComplete="password"
-                  id="password"
+                  autoComplete="new-password"
+                  id="confirm-password"
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                     setConfirmPassword(e.target.value)
                   }
-                  placeholder="Password"
+                  placeholder="••••••••"
                   value={confirmPassword}
                 />
               </div>
@@ -90,7 +96,7 @@ export default function ResetPassword() {
               disabled={isSubmitting}
               type="submit"
             >
-              {isSubmitting ? "Resetting..." : "Reset password"}
+              <LoadingSwap isLoading={isSubmitting}>Reset password</LoadingSwap>
             </Button>
           </form>
         </CardContent>

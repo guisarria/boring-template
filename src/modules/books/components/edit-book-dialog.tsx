@@ -76,7 +76,7 @@ export function EditBookDialog({
     <Dialog onOpenChange={setIsEditing} open={isEditing}>
       <DialogTrigger
         render={
-          <Button size="icon-sm" variant="outline">
+          <Button aria-label="Edit book" size="icon-sm" variant="outline">
             <Pencil />
           </Button>
         }
@@ -110,7 +110,7 @@ export function EditBookDialog({
                         name={field.name}
                         onBlur={field.handleBlur}
                         onChange={(e) => field.handleChange(e.target.value)}
-                        placeholder="Book name"
+                        placeholder="Book name…"
                         value={field.state.value}
                       />
                       {!!isInvalid && <FieldError className="text-xs" />}

@@ -9,12 +9,11 @@ export function SubmitButton({ children }: { children: React.ReactNode }) {
   return (
     <form.Subscribe
       selector={(state) => ({
-        canSubmit: state.canSubmit,
         isSubmitting: state.isSubmitting,
       })}
     >
-      {({ canSubmit, isSubmitting }) => (
-        <Button disabled={!canSubmit || isSubmitting} type="submit">
+      {({ isSubmitting }) => (
+        <Button disabled={isSubmitting} type="submit">
           <LoadingSwap isLoading={isSubmitting}>{children}</LoadingSwap>
         </Button>
       )}

@@ -1,6 +1,6 @@
 import "@/styles/globals.css"
 import { SpeedInsights } from "@vercel/speed-insights/next"
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import { Doto, Geist_Mono, Inter } from "next/font/google"
 import { NuqsAdapter } from "nuqs/adapters/next/app"
 import { QueryProvider } from "@/components/query-provider"
@@ -23,6 +23,13 @@ const fontSerif = Doto({
   subsets: ["latin"],
   variable: "--font-serif",
 })
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
+  ],
+}
 
 export const metadata: Metadata = createMetadata({
   title: {

@@ -73,14 +73,14 @@ export function SignUpForm() {
               <FieldSeparator />
               <form.AppField name="name">
                 {(field) => (
-                  <field.TextField label="Name" placeholder="Enter your name" />
+                  <field.TextField label="Name" placeholder="Jane Doe" />
                 )}
               </form.AppField>
               <form.AppField name="email">
                 {(field) => (
                   <field.EmailField
                     label="Email address"
-                    placeholder="Enter your email address"
+                    placeholder="you@example.com"
                   />
                 )}
               </form.AppField>

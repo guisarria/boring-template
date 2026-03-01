@@ -51,7 +51,11 @@ export function DeleteBookDialog({
     <AlertDialog onOpenChange={setIsOpen} open={isOpen}>
       <AlertDialogTrigger
         render={
-          <Button size="icon-sm" variant="destructive-outline">
+          <Button
+            aria-label="Delete book"
+            size="icon-sm"
+            variant="destructive-outline"
+          >
             <Trash2 />
           </Button>
         }
@@ -77,7 +81,7 @@ export function DeleteBookDialog({
             onClick={() => handleDeleteBookById({ id: bookId })}
             variant="destructive"
           >
-            <LoadingSwap isLoading={isPending}>{"Continue"}</LoadingSwap>
+            <LoadingSwap isLoading={isPending}>Delete</LoadingSwap>
           </Button>
         </AlertDialogFooter>
       </AlertDialogContent>

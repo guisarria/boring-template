@@ -69,7 +69,7 @@ export function SignInForm() {
                 {(field) => (
                   <field.EmailField
                     label="Email address"
-                    placeholder="Enter your email address"
+                    placeholder="you@example.com"
                   />
                 )}
               </form.AppField>
@@ -77,7 +77,7 @@ export function SignInForm() {
                 {(field) => (
                   <field.PasswordField
                     label="Password"
-                    placeholder="Enter your password"
+                    placeholder="••••••••"
                   />
                 )}
               </form.AppField>

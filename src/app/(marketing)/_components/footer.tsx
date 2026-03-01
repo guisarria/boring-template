@@ -24,8 +24,10 @@ export const Footer = () => (
               <Link
                 className="flex items-center gap-x-2"
                 href={"https://github.com/guisarria/boring-template"}
+                rel="noopener noreferrer"
+                target="_blank"
               >
-                <GitHubIcon />
+                <GitHubIcon aria-hidden />
                 GitHub
               </Link>
             </li>

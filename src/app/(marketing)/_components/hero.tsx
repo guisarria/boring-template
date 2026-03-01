@@ -9,7 +9,7 @@ export function Hero() {
   return (
     <section
       aria-labelledby="hero-heading"
-      className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden pb-20"
+      className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden pb-32"
     >
       <div
         aria-hidden
@@ -22,7 +22,7 @@ export function Hero() {
 
       <motion.div
         animate={{ opacity: 1, y: 0 }}
-        className="relative z-10 flex flex-col items-center gap-8"
+        className="z-10 flex flex-col items-center gap-y-12"
         initial={{ opacity: 0, y: 24 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
       >

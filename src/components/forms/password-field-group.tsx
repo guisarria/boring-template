@@ -58,7 +58,7 @@ export const PasswordFieldGroup = withFieldGroup({
             <PasswordFieldComponent
               autoComplete="new-password"
               label="Password"
-              placeholder="Enter your password"
+              placeholder="••••••••"
             />
           )}
         </group.AppField>
@@ -78,7 +78,7 @@ export const PasswordFieldGroup = withFieldGroup({
             <PasswordFieldComponent
               autoComplete="new-password"
               label="Confirm Password"
-              placeholder="Confirm your password"
+              placeholder="••••••••"
             />
           )}
         </group.AppField>

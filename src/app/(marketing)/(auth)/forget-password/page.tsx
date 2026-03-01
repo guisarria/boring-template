@@ -15,9 +15,10 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { LoadingSwap } from "@/components/ui/loading-swap"
 import { authClient } from "@/modules/auth/auth-client"
 
-export default function Component() {
+export default function ForgetPasswordPage() {
   const [email, setEmail] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
@@ -91,8 +92,9 @@ export default function Component() {
                 <Label htmlFor="email">Email</Label>
                 <Input
                   id="email"
+                  name="email"
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your email"
+                  placeholder="you@example.com"
                   required
                   type="email"
                   value={email}
@@ -110,7 +112,9 @@ export default function Component() {
               disabled={isSubmitting}
               type="submit"
             >
-              {isSubmitting ? "Sending..." : "Send reset link"}
+              <LoadingSwap isLoading={isSubmitting}>
+                Send reset link
+              </LoadingSwap>
             </Button>
           </form>
         </CardContent>

@@ -6,6 +6,7 @@ import { toast } from "sonner"
 
 import { useAppForm } from "@/components/forms/form-context"
 import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
 import {
   Dialog,
   DialogContent,
@@ -82,7 +83,7 @@ function ChangePassword() {
                   <field.PasswordField
                     autoComplete="current-password"
                     label="Current Password"
-                    placeholder="Password"
+                    placeholder="••••••••"
                   />
                 )}
               </form.AppField>
@@ -91,7 +92,7 @@ function ChangePassword() {
                   <field.PasswordField
                     autoComplete="new-password"
                     label="New Password"
-                    placeholder="Password"
+                    placeholder="••••••••"
                   />
                 )}
               </form.AppField>
@@ -100,18 +101,19 @@ function ChangePassword() {
                   <field.PasswordField
                     autoComplete="new-password"
                     label="Confirm Password"
-                    placeholder="Password"
+                    placeholder="••••••••"
                   />
                 )}
               </form.AppField>
               <form.AppField name="revokeOtherSessions">
                 {(field) => (
                   <div className="flex items-center gap-2">
-                    <input
+                    <Checkbox
                       checked={field.state.value}
                       id="sign-out-devices"
-                      onChange={(e) => field.handleChange(e.target.checked)}
-                      type="checkbox"
+                      onCheckedChange={(checked) =>
+                        field.handleChange(!!checked)
+                      }
                     />
                     <Label htmlFor="sign-out-devices">
                       Sign out all devices
