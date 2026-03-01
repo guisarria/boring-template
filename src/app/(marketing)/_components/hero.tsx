@@ -37,7 +37,7 @@ export function Hero() {
         </motion.div>
 
         <h1
-          className="max-w-4xl text-center font-serif text-4xl leading-tight tracking-tighter md:text-6xl"
+          className="max-w-4xl text-center font-serif text-4xl leading-tight tracking-tighter md:text-5xl"
           id="hero-heading"
         >
           <span className="block">Ship faster with</span>
@@ -48,23 +48,21 @@ export function Hero() {
 
         <HeroAssetAscii className="select-none bg-linear-to-r from-orange-400 via-orange-600 to-cyan-800 bg-clip-text text-transparent" />
 
-        <p className="max-w-lg text-pretty px-4 text-center text-md text-muted-foreground md:max-w-3xl md:text-xl">
-          A minimal, type-safe Next.js template with authentication, database,
-          and email built-in. Start building your product, not your
-          infrastructure.
+        <p className="max-w-lg text-pretty px-4 text-center text-md text-muted-foreground md:max-w-3xl md:text-lg">
+          A minimal, type-safe Next.js template with authentication, database, &
+          email built-in. Start building your product, not your infrastructure.
         </p>
 
         <div className="mt-4 flex items-center gap-4">
           <Button
-            className="h-11 gap-2 px-6"
             nativeButton={false}
             render={<Link href="/sign-up" />}
+            size={"lg"}
           >
             Get Started
             <Zap aria-hidden className="size-4" />
           </Button>
           <Button
-            className="h-11 gap-2 px-6"
             nativeButton={false}
             render={
               <Link
@@ -73,6 +71,7 @@ export function Hero() {
                 target="_blank"
               />
             }
+            size={"lg"}
             variant="outline"
           >
             <GitHubIcon aria-hidden className="size-4" />

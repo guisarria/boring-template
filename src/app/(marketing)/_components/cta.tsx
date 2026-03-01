@@ -34,22 +34,18 @@ export function Cta() {
             Clone the repository and start shipping in minutes.
           </p>
 
-          <div className="flex w-full max-w-sm items-center gap-2 rounded-lg border border-border bg-muted/50 px-4 py-3 font-mono text-sm lg:max-w-lg">
-            <span aria-hidden className="select-none text-muted-foreground">
+          <div className="flex w-full max-w-md items-center gap-2 rounded-lg border border-border bg-muted/50 px-4 py-3 font-mono text-sm lg:max-w-lg">
+            <span aria-hidden className="select-none text-cyan-300">
               $
             </span>
-            <code className="flex-1 select-all text-left">
+            <code className="flex-1 select-all text-left text-sm">
               git clone github.com/guisarria/boring-template
             </code>
             <CopyButton textToCopy="git clone github.com/guisarria/boring-template" />
           </div>
 
           <div className="flex items-center gap-4">
-            <Button
-              className="h-11 px-6"
-              nativeButton={false}
-              render={<Link href="/sign-up" />}
-            >
+            <Button nativeButton={false} render={<Link href="/sign-up" />}>
               Start Building
             </Button>
             <Button

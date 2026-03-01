@@ -8,7 +8,7 @@ export default function Layout({
   children: React.ReactNode
 }>) {
   return (
-    <main className="flex h-screen w-screen flex-col items-center overflow-x-hidden">
+    <main className="flex h-svh w-screen flex-col items-center justify-center overflow-x-hidden">
       <Header />
       {children}
       <Footer />
