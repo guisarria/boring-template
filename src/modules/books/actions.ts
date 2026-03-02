@@ -1,7 +1,6 @@
 "use server"
 
 import { and, eq } from "drizzle-orm"
-import { cacheLife, cacheTag } from "next/cache"
 import { cache } from "react"
 import { authAction, ownedAction, publicAction } from "@/core/dal"
 import { db } from "@/db"
@@ -26,36 +25,22 @@ export async function createBook(values: InsertBook) {
   )
 }
 
-export const getUserBooks = cache(
-  async <T extends Partial<Record<keyof Book, boolean>>>(data: {
-    columns: T
-  }) => {
-    "use cache: private"
-
-    cacheTag("books")
-    cacheLife("minutes")
-
-    return await authAction(
-      async (user) =>
-        await db.query.books.findMany({
-          columns: data.columns,
-          where: eq(books.userId, user.id),
-          with: { pages: { columns: { id: true, title: true } } },
-        }),
-    )
-  },
-)
+export const getUserBooks = cache(async () => {
+  return await authAction(
+    async (user) =>
+      await db.query.books.findMany({
+        columns: { id: true, name: true, isPublic: true },
+        where: eq(books.userId, user.id),
+        with: { pages: { columns: { id: true, title: true } } },
+      }),
+  )
+})
 
 export const getPublicBooksByUserId = cache(
   async <T extends Partial<Record<keyof Book, boolean>>>(data: {
     userId: string
     columns: T
   }) => {
-    "use cache: private"
-
-    cacheTag(`public-books:${data.userId}`)
-    cacheLife("minutes")
-
     return await publicAction(() =>
       db.query.books.findMany({
         columns: data.columns,
@@ -71,11 +56,6 @@ export const getBookById = cache(
     id: string
     columns: T
   }) => {
-    "use cache: private"
-
-    cacheTag(`books:${data.id}`)
-    cacheLife("minutes")
-
     return await publicAction(() =>
       db.query.books.findFirst({
         columns: data.columns,
@@ -97,7 +77,7 @@ export async function updateBookById(data: {
       const parsed = updateBookSchema.parse(data.values)
       await db.update(books).set(parsed).where(eq(books.id, data.id))
     },
-    invalidate: [`books:${data.id}`],
+    invalidate: ["books"],
   })
 }
 
@@ -106,8 +86,11 @@ export async function deleteBookById(data: { id: string }) {
     fetch: () => db.query.books.findFirst({ where: eq(books.id, data.id) }),
     ownerId: (book) => book.userId,
     action: async () => {
-      await db.delete(books).where(eq(books.id, data.id))
+      await db
+        .delete(books)
+        .where(eq(books.id, data.id))
+        .returning({ id: books.id })
     },
-    invalidate: [`books:${data.id}`],
+    invalidate: ["books"],
   })
 }

@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import { useTransition } from "react"
 import { toast } from "sonner"
 import { useAppForm } from "@/components/forms/form-context"
 import { PasswordFieldGroup } from "@/components/forms/password-field-group"
@@ -22,6 +23,7 @@ import { SocialAuthButtons } from "./social-auth-buttons"
 
 export function SignUpForm() {
   const router = useRouter()
+  const [isPending, startTransition] = useTransition()
 
   const form = useAppForm({
     defaultValues: {
@@ -31,22 +33,18 @@ export function SignUpForm() {
       confirmPassword: "",
     } satisfies SignUp,
     validators: {
-      onBlurAsync: signUpSchema,
-      onBlurAsyncDebounceMs: 3000,
+      onSubmit: signUpSchema,
     },
-    onSubmit: async ({ value }) => {
-      try {
+    onSubmit: ({ value }) => {
+      startTransition(async () => {
         const response = await signUpUser(value)
-        if (response?.success) {
-          toast.success("Account created successfully!")
+        if (response.success) {
+          toast.success("Signed up successfully!")
           form.reset()
           router.push("/dashboard")
           return
         }
-        toast.error(response?.error.type)
-      } catch {
-        toast.error("Unable to sign up, please try again.")
-      }
+      })
     },
   })
 
@@ -91,7 +89,9 @@ export function SignUpForm() {
                 }}
                 form={form}
               />
-              <form.SubmitButton>Continue with Email</form.SubmitButton>
+              <form.SubmitButton isPending={isPending}>
+                Continue with Email
+              </form.SubmitButton>
             </FieldSet>
           </form>
         </form.AppForm>

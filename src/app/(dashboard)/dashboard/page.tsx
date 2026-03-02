@@ -1,8 +1,4 @@
-import { Suspense } from "react"
-import {
-  BooksCardGrid,
-  BooksCardGridSkeleton,
-} from "@/modules/books/components/books-card-grid"
+import { BooksCardGrid } from "@/modules/books/components/books-card-grid"
 import { CreateBookButton } from "@/modules/books/components/create-book-button"
 
 export default function Page() {
@@ -15,9 +11,7 @@ export default function Page() {
         </div>
       </div>
 
-      <Suspense fallback={<BooksCardGridSkeleton />}>
-        <BooksCardGrid />
-      </Suspense>
+      <BooksCardGrid />
     </>
   )
 }

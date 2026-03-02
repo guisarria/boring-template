@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
 import { LoadingSwap } from "@/components/ui/loading-swap"
+import { getQueryClient } from "@/lib/get-query-client"
 import { deleteBookById } from "@/modules/books/actions"
 
 type DeleteBookDialogProps = {
@@ -31,6 +32,7 @@ export function DeleteBookDialog({
   pagesCount,
   onSuccessAction,
 }: DeleteBookDialogProps) {
+  const queryClient = getQueryClient()
   const [isOpen, setIsOpen] = useState(false)
   const pageLabel = pagesCount === 1 ? "page" : "pages"
 
@@ -42,6 +44,7 @@ export function DeleteBookDialog({
       onSuccessAction?.()
       setIsOpen(false)
     },
+    onSettled: () => queryClient.invalidateQueries({ queryKey: ["books"] }),
     onError: () => {
       toast.error("Failed to delete book")
     },

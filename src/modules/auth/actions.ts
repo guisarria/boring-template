@@ -38,6 +38,7 @@ export async function signUpUser({ name, email, password }: SignUp) {
       body: { name, email, password },
       headers: await headers(),
     })
+
     const result = response satisfies SignUpResult
 
     await db

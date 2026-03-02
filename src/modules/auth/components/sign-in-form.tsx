@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import { useTransition } from "react"
 import { toast } from "sonner"
 import { useAppForm } from "@/components/forms/form-context"
 import { buttonVariants } from "@/components/ui/button"
@@ -21,6 +22,7 @@ import { SocialAuthButtons } from "./social-auth-buttons"
 
 export function SignInForm() {
   const router = useRouter()
+  const [isPending, startTransition] = useTransition()
 
   const form = useAppForm({
     defaultValues: {
@@ -30,8 +32,8 @@ export function SignInForm() {
     validators: {
       onSubmit: signInSchema,
     },
-    onSubmit: async ({ value }) => {
-      try {
+    onSubmit: ({ value }) => {
+      startTransition(async () => {
         const response = await signInUser(value)
         if (response.success) {
           toast.success("Signed in successfully!")
@@ -39,10 +41,7 @@ export function SignInForm() {
           router.push("/dashboard")
           return
         }
-        toast.error(response.error.type)
-      } catch {
-        toast.error("It was not possible to sign in")
-      }
+      })
     },
   })
 
@@ -81,7 +80,9 @@ export function SignInForm() {
                   />
                 )}
               </form.AppField>
-              <form.SubmitButton>Continue with Email</form.SubmitButton>
+              <form.SubmitButton isPending={isPending}>
+                Continue with Email
+              </form.SubmitButton>
               <FieldSeparator />
               <SocialAuthButtons />
             </FieldSet>
@@ -91,7 +92,7 @@ export function SignInForm() {
 
       <CardFooter>
         <div className="flex w-full items-center justify-center gap-x-1 text-center text-xs sm:text-sm">
-          <p>Don&apos;t have an account?</p>
+          <p>Don&apos; t have an account?</p>
           <Link
             className={cn(
               buttonVariants({ variant: "link", size: "xs" }),

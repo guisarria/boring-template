@@ -4,7 +4,13 @@ import { Button } from "@/components/ui/button"
 import { LoadingSwap } from "@/components/ui/loading-swap"
 import { useFormContext } from "./form-context"
 
-export function SubmitButton({ children }: { children: React.ReactNode }) {
+export function SubmitButton({
+  children,
+  isPending = false,
+}: {
+  children: React.ReactNode
+  isPending?: boolean
+}) {
   const form = useFormContext()
   return (
     <form.Subscribe
@@ -13,8 +19,10 @@ export function SubmitButton({ children }: { children: React.ReactNode }) {
       })}
     >
       {({ isSubmitting }) => (
-        <Button disabled={isSubmitting} type="submit">
-          <LoadingSwap isLoading={isSubmitting}>{children}</LoadingSwap>
+        <Button disabled={isSubmitting || isPending} type="submit">
+          <LoadingSwap isLoading={isSubmitting || isPending}>
+            {children}
+          </LoadingSwap>
         </Button>
       )}
     </form.Subscribe>

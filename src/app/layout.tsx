@@ -2,8 +2,6 @@ import "@/styles/globals.css"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import type { Metadata, Viewport } from "next"
 import { Doto, Geist_Mono, Inter } from "next/font/google"
-import { NuqsAdapter } from "nuqs/adapters/next/app"
-import { QueryProvider } from "@/components/query-provider"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "@/components/ui/sonner"
 import { createMetadata } from "@/lib/metadata"
@@ -54,20 +52,16 @@ export default function RootLayout({
       <body
         className={`${fontSans.variable} ${fontMono.variable} ${fontSerif.variable} font-mono tracking-tight antialiased`}
       >
-        <QueryProvider>
-          <NuqsAdapter>
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="system"
-              disableTransitionOnChange
-              enableSystem
-            >
-              {children}
-              <SpeedInsights />
-              <Toaster closeButton richColors />
-            </ThemeProvider>
-          </NuqsAdapter>
-        </QueryProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          disableTransitionOnChange
+          enableSystem
+        >
+          {children}
+          <SpeedInsights />
+          <Toaster closeButton richColors />
+        </ThemeProvider>
       </body>
     </html>
   )

@@ -51,16 +51,7 @@ export function AppSidebar({ ...props }: ComponentProps<typeof Sidebar>) {
 }
 
 const SidebarContentData = async () => {
-  const result = await getUserBooks({
-    columns: {
-      id: true,
-      userId: true,
-      name: true,
-      createdAt: true,
-      updatedAt: true,
-      isPublic: true,
-    },
-  })
+  const result = await getUserBooks()
 
   if (!result.success) {
     return <SidebarContent />
@@ -108,7 +99,7 @@ const SidebarFooterdata = async () => {
                     name={user.user.email}
                     size={90}
                   />
-                  <span>{user.user.username ?? "User"}</span>
+                  <span>{user.user.name ?? "User"}</span>
                 </SidebarMenuButton>
               }
             />

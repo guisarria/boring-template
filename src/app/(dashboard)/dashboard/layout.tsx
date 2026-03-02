@@ -1,5 +1,7 @@
+import { NuqsAdapter } from "nuqs/adapters/next/app"
 import { AppSidebar } from "@/app/(dashboard)/dashboard/_components/layout/app-sidebar"
 import { PageWrapper } from "@/app/(dashboard)/dashboard/_components/layout/page-wrapper"
+import { QueryProvider } from "@/components/query-provider"
 import { SidebarProvider } from "@/components/ui/sidebar"
 
 export default function DashboardLayout({
@@ -10,11 +12,15 @@ export default function DashboardLayout({
   breadcrumb: React.ReactNode
 }) {
   return (
-    <SidebarProvider>
-      <AppSidebar />
-      <main className="flex-1">
-        <PageWrapper breadcrumb={breadcrumb}>{children}</PageWrapper>
-      </main>
-    </SidebarProvider>
+    <QueryProvider>
+      <NuqsAdapter>
+        <SidebarProvider>
+          <AppSidebar />
+          <main className="flex-1">
+            <PageWrapper breadcrumb={breadcrumb}>{children}</PageWrapper>
+          </main>
+        </SidebarProvider>
+      </NuqsAdapter>
+    </QueryProvider>
   )
 }
