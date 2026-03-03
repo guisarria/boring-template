@@ -1,24 +1,21 @@
-"use client"
-
-import { PasswordInput } from "@/components/ui/password-input"
+import { Checkbox } from "@/components/ui/checkbox"
 import { useFieldContext } from "../form-context"
 import { FieldBase, type FieldProps } from "./field-base"
 
-export function PasswordField(props: FieldProps) {
-  const field = useFieldContext<string>()
+export function CheckboxField(props: FieldProps) {
+  const field = useFieldContext<boolean>()
   const { isTouched, isValid } = field.state.meta
   const isInvalid = isTouched && !isValid
 
   return (
-    <FieldBase {...props}>
-      <PasswordInput
+    <FieldBase {...props} controlFirst horizontal>
+      <Checkbox
         aria-invalid={isInvalid}
+        checked={field.state.value}
         id={field.name}
         name={field.name}
         onBlur={field.handleBlur}
-        onChange={(e) => field.handleChange(e.target.value)}
-        placeholder={props.placeholder}
-        value={field.state.value}
+        onCheckedChange={(e) => field.handleChange(e === true)}
       />
     </FieldBase>
   )

@@ -76,9 +76,11 @@ export function SignUpForm() {
               </form.AppField>
               <form.AppField name="email">
                 {(field) => (
-                  <field.EmailField
+                  <field.InputField
+                    autoComplete="email"
                     label="Email address"
                     placeholder="you@example.com"
+                    type="email"
                   />
                 )}
               </form.AppField>

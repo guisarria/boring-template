@@ -1,35 +1,70 @@
-import { Activity, useId } from "react"
-import { Field, FieldError, FieldLabel } from "@/components/ui/field"
+import { Activity, type ReactNode } from "react"
+import {
+  Field,
+  FieldContent,
+  FieldDescription,
+  FieldError,
+  FieldLabel,
+} from "@/components/ui/field"
 import { useFieldContext } from "../form-context"
 
-type FieldBaseProps<T = string> = {
+export type FieldProps = {
   label: string
-  children: (props: {
-    field: ReturnType<typeof useFieldContext<T>>
-    errorId: string
-    isInvalid: boolean
-  }) => React.ReactNode
+  description?: string
+  type?: React.ComponentProps<"input">["type"]
+  placeholder?: React.ComponentProps<"input">["placeholder"]
+  autoComplete?: React.ComponentProps<"input">["autoComplete"]
 }
 
-export type FieldProps = Pick<FieldBaseProps, "label"> & {
-  placeholder?: string
-  autoComplete?: string
+type FieldBaseProps = FieldProps & {
+  children: ReactNode
+  horizontal?: boolean
+  controlFirst?: boolean
 }
 
-export function FieldBase<T = string>({ label, children }: FieldBaseProps<T>) {
-  const field = useFieldContext<T>()
-  const errorId = useId()
-
+export function FieldBase({
+  children,
+  label,
+  description,
+  controlFirst,
+  horizontal,
+}: FieldBaseProps) {
+  const field = useFieldContext()
   const { isTouched, isValid, errors } = field.state.meta
   const isInvalid = isTouched && !isValid
 
   return (
-    <Field data-invalid={isInvalid || undefined}>
-      <FieldLabel htmlFor={field.name}>{label}</FieldLabel>
-      {children({ field, errorId, isInvalid })}
-      <Activity mode={isInvalid ? "visible" : "hidden"}>
-        <FieldError errors={errors} id={errorId} />
-      </Activity>
+    <Field
+      data-invalid={isInvalid}
+      orientation={horizontal ? "horizontal" : undefined}
+    >
+      {controlFirst ? (
+        <>
+          {children}
+          <FieldContent>
+            <FieldLabel htmlFor={field.name}>{label}</FieldLabel>
+            <Activity mode={description ? "visible" : "hidden"}>
+              <FieldDescription>{description}</FieldDescription>
+            </Activity>
+            <Activity mode={isInvalid ? "visible" : "hidden"}>
+              <FieldError errors={errors} />
+            </Activity>
+          </FieldContent>
+        </>
+      ) : (
+        <>
+          <FieldContent>
+            <FieldLabel htmlFor={field.name}>{label}</FieldLabel>
+            <Activity mode={description ? "visible" : "hidden"}>
+              <FieldDescription>{description}</FieldDescription>
+            </Activity>
+          </FieldContent>
+          {children}
+          <Activity mode={isInvalid ? "visible" : "hidden"}>
+            <FieldError errors={errors} />
+          </Activity>
+        </>
+      )}
     </Field>
   )
 }

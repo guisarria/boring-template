@@ -1,46 +1,10 @@
 "use client"
 
-import { useId } from "react"
-import { Field, FieldError, FieldLabel } from "@/components/ui/field"
-import { PasswordInput } from "@/components/ui/password-input"
-import { useFieldContext, withFieldGroup } from "../form-context"
+import { withFieldGroup } from "../form-context"
 
 type PasswordFields = {
   password: string
   confirmPassword: string
-}
-
-function PasswordFieldComponent({
-  label,
-  placeholder,
-  autoComplete = "new-password",
-}: {
-  label: string
-  placeholder?: string
-  autoComplete?: string
-}) {
-  const field = useFieldContext<string>()
-  const errorId = useId()
-  const isInvalid = !!field.state.meta.isTouched && !field.state.meta.isValid
-  const errors = field.state.meta.errors
-
-  return (
-    <Field data-invalid={isInvalid || undefined}>
-      <FieldLabel htmlFor={field.name}>{label}</FieldLabel>
-      <PasswordInput
-        aria-describedby={isInvalid ? errorId : undefined}
-        aria-invalid={isInvalid}
-        autoComplete={autoComplete}
-        id={field.name}
-        name={field.name}
-        onBlur={field.handleBlur}
-        onChange={(e) => field.handleChange(e.target.value)}
-        placeholder={placeholder}
-        value={field.state.value}
-      />
-      {isInvalid && <FieldError errors={errors} id={errorId} />}
-    </Field>
-  )
 }
 
 const defaultValues: PasswordFields = {
@@ -54,8 +18,8 @@ export const PasswordFieldGroup = withFieldGroup({
     return (
       <>
         <group.AppField name="password">
-          {() => (
-            <PasswordFieldComponent
+          {(field) => (
+            <field.PasswordField
               autoComplete="new-password"
               label="Password"
               placeholder="••••••••"
@@ -74,8 +38,8 @@ export const PasswordFieldGroup = withFieldGroup({
             },
           }}
         >
-          {() => (
-            <PasswordFieldComponent
+          {(field) => (
+            <field.PasswordField
               autoComplete="new-password"
               label="Confirm Password"
               placeholder="••••••••"

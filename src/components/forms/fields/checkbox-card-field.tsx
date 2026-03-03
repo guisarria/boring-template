@@ -1,6 +1,6 @@
 "use client"
 
-import { useId } from "react"
+import { Activity, useId } from "react"
 import { Checkbox } from "@/components/ui/checkbox"
 import {
   Field,
@@ -12,39 +12,42 @@ import {
 } from "@/components/ui/field"
 import { useFieldContext } from "../form-context"
 
-type FieldProps = {
+type SelectCardFieldProps = {
   label: string
-  placeholder?: string
-  autoComplete?: string
+  description?: string
+  orientation?: "horizontal" | "vertical"
 }
 
-export function SelectCardField({
+export function CheckboxCardField({
   label,
   description,
   orientation = "vertical",
-}: FieldProps & {
-  description?: string
-  orientation?: "horizontal" | "vertical"
-}) {
+}: SelectCardFieldProps) {
   const field = useFieldContext<boolean>()
   const errorId = useId()
-  const isInvalid = !!field.state.meta.isTouched && !field.state.meta.isValid
-  const errors = field.state.meta.errors
+
+  const { isTouched, isValid, errors } = field.state.meta
+  const isInvalid = isTouched && !isValid
 
   return (
     <FieldLabel data-invalid={isInvalid} htmlFor={field.name}>
       <Field orientation={orientation}>
         <FieldContent>
           <FieldTitle aria-invalid={isInvalid}>{label}</FieldTitle>
-          {description && <FieldDescription>{description}</FieldDescription>}
+          <Activity mode={description ? "visible" : "hidden"}>
+            <FieldDescription>{description}</FieldDescription>
+          </Activity>
         </FieldContent>
         <Checkbox
+          aria-describedby={isInvalid ? errorId : undefined}
           aria-invalid={isInvalid}
           checked={field.state.value}
           id={field.name}
           onCheckedChange={(checked) => field.handleChange(!!checked)}
         />
-        {isInvalid && <FieldError errors={errors} id={errorId} />}
+        <Activity mode={isInvalid ? "visible" : "hidden"}>
+          <FieldError errors={errors} id={errorId} />
+        </Activity>
       </Field>
     </FieldLabel>
   )

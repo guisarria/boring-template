@@ -53,7 +53,6 @@ export function SignInForm() {
           Enter your email and password to sign in
         </CardDescription>
       </CardHeader>
-
       <CardContent>
         <form.AppForm>
           <form
@@ -66,9 +65,11 @@ export function SignInForm() {
             <FieldSet>
               <form.AppField name="email">
                 {(field) => (
-                  <field.EmailField
+                  <field.InputField
+                    autoComplete="email"
                     label="Email address"
                     placeholder="you@example.com"
+                    type="email"
                   />
                 )}
               </form.AppField>
@@ -89,7 +90,6 @@ export function SignInForm() {
           </form>
         </form.AppForm>
       </CardContent>
-
       <CardFooter>
         <div className="flex w-full items-center justify-center gap-x-1 text-center text-xs sm:text-sm">
           <p>Don&apos; t have an account?</p>
