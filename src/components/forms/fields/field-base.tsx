@@ -1,6 +1,12 @@
-import { useId } from "react"
+import { Activity, useId } from "react"
 import { Field, FieldError, FieldLabel } from "@/components/ui/field"
 import { useFieldContext } from "../form-context"
+
+export type FieldProps = {
+  label: string
+  placeholder?: string
+  autoComplete?: string
+}
 
 type FieldBaseProps = {
   label: string
@@ -21,7 +27,9 @@ export function FieldBase({ label, children }: FieldBaseProps) {
     <Field data-invalid={isInvalid || undefined}>
       <FieldLabel htmlFor={field.name}>{label}</FieldLabel>
       {children({ field, errorId, isInvalid })}
-      {isInvalid && <FieldError errors={errors} id={errorId} />}
+      <Activity mode={isInvalid ? "visible" : "hidden"}>
+        <FieldError errors={errors} id={errorId} />
+      </Activity>
     </Field>
   )
 }

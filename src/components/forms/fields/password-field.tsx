@@ -1,13 +1,7 @@
 "use client"
 
 import { PasswordInput } from "@/components/ui/password-input"
-import { FieldBase } from "./field-base"
-
-type FieldProps = {
-  label: string
-  placeholder?: string
-  autoComplete?: string
-}
+import { FieldBase, type FieldProps } from "./field-base"
 
 export function PasswordField({
   label,

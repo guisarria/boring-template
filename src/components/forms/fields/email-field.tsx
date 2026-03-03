@@ -1,13 +1,7 @@
 "use client"
 
 import { Input } from "@/components/ui/input"
-import { FieldBase } from "./field-base"
-
-type FieldProps = {
-  label: string
-  placeholder?: string
-  autoComplete?: string
-}
+import { FieldBase, type FieldProps } from "./field-base"
 
 export function EmailField({
   label,

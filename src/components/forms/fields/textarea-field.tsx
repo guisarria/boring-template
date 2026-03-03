@@ -1,13 +1,7 @@
 "use client"
 
 import { Textarea } from "@/components/ui/textarea"
-import { FieldBase } from "./field-base"
-
-type FieldProps = {
-  label: string
-  placeholder?: string
-  autoComplete?: string
-}
+import { FieldBase, type FieldProps } from "./field-base"
 
 export function TextareaField({
   label,
