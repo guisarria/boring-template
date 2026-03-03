@@ -2,23 +2,22 @@ import { Activity, useId } from "react"
 import { Field, FieldError, FieldLabel } from "@/components/ui/field"
 import { useFieldContext } from "../form-context"
 
-export type FieldProps = {
-  label: string
-  placeholder?: string
-  autoComplete?: string
-}
-
-type FieldBaseProps = {
+type FieldBaseProps<T = string> = {
   label: string
   children: (props: {
-    field: ReturnType<typeof useFieldContext<string>>
+    field: ReturnType<typeof useFieldContext<T>>
     errorId: string
     isInvalid: boolean
   }) => React.ReactNode
 }
 
-export function FieldBase({ label, children }: FieldBaseProps) {
-  const field = useFieldContext<string>()
+export type FieldProps = Pick<FieldBaseProps, "label"> & {
+  placeholder?: string
+  autoComplete?: string
+}
+
+export function FieldBase<T = string>({ label, children }: FieldBaseProps<T>) {
+  const field = useFieldContext<T>()
   const errorId = useId()
 
   const { isTouched, isValid, errors } = field.state.meta
