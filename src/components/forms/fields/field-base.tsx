@@ -20,8 +20,9 @@ type FieldBaseProps = {
 export function FieldBase({ label, children }: FieldBaseProps) {
   const field = useFieldContext<string>()
   const errorId = useId()
-  const isInvalid = !!field.state.meta.isTouched && !field.state.meta.isValid
-  const errors = field.state.meta.errors
+
+  const { isTouched, isValid, errors } = field.state.meta
+  const isInvalid = isTouched && !isValid
 
   return (
     <Field data-invalid={isInvalid || undefined}>
