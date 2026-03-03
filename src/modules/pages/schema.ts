@@ -53,6 +53,8 @@ export const contentSchema = z.custom<JSONContent>(
   { message: "Content must be a valid document with type 'doc'" },
 )
 
+export const emptyContent: JSONContent = { type: "doc", content: [] }
+
 export const createPageSchema = z.object({
   title: z.string().min(1).max(100),
   content: contentSchema,

@@ -4,8 +4,8 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useTransition } from "react"
 import { toast } from "sonner"
+import { PasswordFieldGroup } from "@/components/forms/fields/password-field-group"
 import { useAppForm } from "@/components/forms/form-context"
-import { PasswordFieldGroup } from "@/components/forms/password-field-group"
 import { buttonVariants } from "@/components/ui/button"
 import {
   Card,
@@ -49,7 +49,7 @@ export function SignUpForm() {
   })
 
   return (
-    <Card>
+    <Card className="w-full max-w-lg">
       <CardHeader>
         <CardTitle>Let's create your account</CardTitle>
         <CardDescription>
@@ -71,7 +71,7 @@ export function SignUpForm() {
               <FieldSeparator />
               <form.AppField name="name">
                 {(field) => (
-                  <field.TextField label="Name" placeholder="Jane Doe" />
+                  <field.InputField label="Name" placeholder="Jane Doe" />
                 )}
               </form.AppField>
               <form.AppField name="email">

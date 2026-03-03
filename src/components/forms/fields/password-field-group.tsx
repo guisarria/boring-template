@@ -3,7 +3,7 @@
 import { useId } from "react"
 import { Field, FieldError, FieldLabel } from "@/components/ui/field"
 import { PasswordInput } from "@/components/ui/password-input"
-import { useFieldContext, withFieldGroup } from "./form-context"
+import { useFieldContext, withFieldGroup } from "../form-context"
 
 type PasswordFields = {
   password: string

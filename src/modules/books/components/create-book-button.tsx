@@ -54,48 +54,48 @@ export const CreateBookButton = () => {
 
   return (
     <Dialog onOpenChange={setIsOpen} open={isOpen}>
-      <DialogTrigger render={<Button size={"sm"}>Create book</Button>} />
+      <DialogTrigger render={<Button size={"sm"}>Create Book</Button>} />
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Create book</DialogTitle>
-          <DialogDescription>Create a new book config.</DialogDescription>
+          <DialogTitle>Create Book</DialogTitle>
+          <DialogDescription>Create a new book.</DialogDescription>
         </DialogHeader>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault()
-            form.handleSubmit()
-          }}
-        >
-          <FieldSet>
-            <FieldGroup>
-              <form.AppField name="name">
-                {(field) => (
-                  <field.TextField label="Name" placeholder="Book name" />
-                )}
-              </form.AppField>
-              <form.AppField name="isPublic">
-                {(field) => (
-                  <field.SelectCardField
-                    description="Make the book public"
-                    label="Public"
-                    orientation="horizontal"
-                  />
-                )}
-              </form.AppField>
-              <DialogFooter>
-                <DialogClose
-                  onClick={() => form.reset()}
-                  render={<Button variant="outline" />}
-                >
-                  Cancel
-                </DialogClose>
-                <form.AppForm>
+        <form.AppForm>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault()
+              form.handleSubmit()
+            }}
+          >
+            <FieldSet>
+              <FieldGroup>
+                <form.AppField name="name">
+                  {(field) => (
+                    <field.InputField label="Name" placeholder="Book name" />
+                  )}
+                </form.AppField>
+                <form.AppField name="isPublic">
+                  {(field) => (
+                    <field.SelectCardField
+                      description="Make the book public"
+                      label="Public"
+                      orientation="horizontal"
+                    />
+                  )}
+                </form.AppField>
+                <DialogFooter>
+                  <DialogClose
+                    onClick={() => form.reset()}
+                    render={<Button variant="outline" />}
+                  >
+                    Cancel
+                  </DialogClose>
                   <form.SubmitButton>Create</form.SubmitButton>
-                </form.AppForm>
-              </DialogFooter>
-            </FieldGroup>
-          </FieldSet>
-        </form>
+                </DialogFooter>
+              </FieldGroup>
+            </FieldSet>
+          </form>
+        </form.AppForm>
       </DialogContent>
     </Dialog>
   )
