@@ -1,8 +1,8 @@
 "use client"
 
-import { useMutation } from "@tanstack/react-query"
 import { Trash2 } from "lucide-react"
-import { useState } from "react"
+import { useRouter } from "next/navigation"
+import { useState, useTransition } from "react"
 import { toast } from "sonner"
 import {
   AlertDialog,
@@ -16,39 +16,36 @@ import {
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
 import { LoadingSwap } from "@/components/ui/loading-swap"
-import { getQueryClient } from "@/lib/get-query-client"
 import { deleteBookById } from "@/modules/books/actions"
 
 type DeleteBookDialogProps = {
   bookId: string
   bookName: string
   pagesCount: number
-  onSuccessAction?: () => void
 }
 
 export function DeleteBookDialog({
   bookId,
   bookName,
   pagesCount,
-  onSuccessAction,
 }: DeleteBookDialogProps) {
-  const queryClient = getQueryClient()
+  const router = useRouter()
   const [isOpen, setIsOpen] = useState(false)
+  const [isPending, startTransition] = useTransition()
   const pageLabel = pagesCount === 1 ? "page" : "pages"
 
-  const { isPending, mutateAsync: handleDeleteBookById } = useMutation({
-    mutationFn: async (data: { id: string }) => await deleteBookById(data),
-    mutationKey: ["book", bookId],
-    onSuccess: () => {
-      toast.success("Book deleted successfully")
-      onSuccessAction?.()
-      setIsOpen(false)
-    },
-    onSettled: () => queryClient.invalidateQueries({ queryKey: ["books"] }),
-    onError: () => {
-      toast.error("Failed to delete book")
-    },
-  })
+  const handleDeleteBookById = (data: { id: string }) => {
+    startTransition(async () => {
+      const result = await deleteBookById(data)
+      if (result.success) {
+        toast.success("Book deleted successfully")
+        router.refresh()
+        setIsOpen(false)
+      } else {
+        toast.error("Failed to delete book")
+      }
+    })
+  }
 
   return (
     <AlertDialog onOpenChange={setIsOpen} open={isOpen}>

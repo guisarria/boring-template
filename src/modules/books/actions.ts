@@ -1,6 +1,6 @@
 "use server"
 
-import { and, eq } from "drizzle-orm"
+import { and, eq, or } from "drizzle-orm"
 import { cache } from "react"
 import { authAction, ownedAction, publicAction } from "@/core/dal"
 import { db } from "@/db"
@@ -13,16 +13,13 @@ import {
 } from "./schema"
 
 export async function createBook(values: InsertBook) {
-  return await authAction(
-    async (user) => {
-      const parsed = createBookSchema.parse(values)
-      return await db
-        .insert(books)
-        .values({ ...parsed, userId: user.id })
-        .returning({ id: books.id })
-    },
-    { invalidate: (data) => [`books:${data[0]?.id}`] },
-  )
+  return await authAction(async (user) => {
+    const parsed = createBookSchema.parse(values)
+    return await db
+      .insert(books)
+      .values({ ...parsed, userId: user.id })
+      .returning({ id: books.id })
+  })
 }
 
 export const getUserBooks = cache(async () => {
@@ -56,11 +53,25 @@ export const getBookById = cache(
     id: string
     columns: T
   }) => {
-    return await publicAction(() =>
+    return await authAction(async (user) =>
       db.query.books.findFirst({
         columns: data.columns,
-        where: eq(books.id, data.id),
-        with: { pages: true },
+        where: and(
+          eq(books.id, data.id),
+          or(eq(books.userId, user.id), eq(books.isPublic, true)),
+        ),
+        with: {
+          pages: {
+            columns: {
+              id: true,
+              title: true,
+              bookId: true,
+              isPublic: true,
+              createdAt: true,
+              updatedAt: true,
+            },
+          },
+        },
       }),
     )
   },
@@ -77,7 +88,6 @@ export async function updateBookById(data: {
       const parsed = updateBookSchema.parse(data.values)
       await db.update(books).set(parsed).where(eq(books.id, data.id))
     },
-    invalidate: ["books"],
   })
 }
 
@@ -91,6 +101,16 @@ export async function deleteBookById(data: { id: string }) {
         .where(eq(books.id, data.id))
         .returning({ id: books.id })
     },
-    invalidate: ["books"],
   })
 }
+
+export const getSidebarBooks = cache(async () => {
+  return await authAction(
+    async (user) =>
+      await db.query.books.findMany({
+        columns: { id: true, name: true },
+        where: eq(books.userId, user.id),
+        with: { pages: { columns: { id: true, title: true } } },
+      }),
+  )
+})

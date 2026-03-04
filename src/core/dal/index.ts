@@ -1,6 +1,5 @@
 import { DrizzleQueryError } from "drizzle-orm"
 import { errAsync, fromPromise, okAsync, type ResultAsync } from "neverthrow"
-import { updateTag } from "next/cache"
 import { notFound, redirect } from "next/navigation"
 import { ZodError } from "zod"
 import { getServerSession } from "@/modules/auth/server"
@@ -14,6 +13,18 @@ export type AppError =
   | { type: "unexpected"; error: unknown }
   | { type: "validation"; message: string }
 
+type AppResult<T> = ResultAsync<T, AppError>
+type AsyncOperation<T> = () => Promise<T>
+
+const APP_ERROR_TYPES: readonly AppError["type"][] = [
+  "unauthenticated",
+  "unauthorized",
+  "not-found",
+  "persistence",
+  "unexpected",
+  "validation",
+]
+
 export const appErrors = {
   unauthenticated: (): AppError => ({ type: "unauthenticated" }),
   unauthorized: (): AppError => ({ type: "unauthorized" }),
@@ -26,21 +37,21 @@ export const appErrors = {
   validation: (message: string): AppError => ({ type: "validation", message }),
 } as const
 
-export type SerializedResult<T, E = AppError> =
+export type SerializedResult<T, E extends AppError = AppError> =
   | { success: true; data: T }
   | { success: false; error: E }
 
 export function handleError(error: AppError): never {
-  if (error.type === "unauthenticated") {
-    redirect("/sign-in")
+  switch (error.type) {
+    case "unauthenticated":
+      return redirect("/sign-in")
+    case "unauthorized":
+      return redirect("/dashboard")
+    case "not-found":
+      return notFound()
+    default:
+      throw error
   }
-  if (error.type === "unauthorized") {
-    redirect("/dashboard")
-  }
-  if (error.type === "not-found") {
-    notFound()
-  }
-  throw error
 }
 
 export function assertSuccess<T>(
@@ -51,34 +62,45 @@ export function assertSuccess<T>(
   }
 }
 
-function toAppError(e: unknown): AppError {
-  if (e instanceof ZodError) {
-    return appErrors.validation(e.issues[0]?.message ?? "Validation error")
+function isAppError(error: unknown): error is AppError {
+  if (typeof error !== "object" || error === null || !("type" in error)) {
+    return false
   }
-  if (e instanceof DrizzleQueryError) {
-    return appErrors.persistence(e)
-  }
-  if (e instanceof Error && e.name === "ValidationError") {
-    return appErrors.validation(e.message)
-  }
-  return appErrors.unexpected(e)
+
+  const type = (error as { type: unknown }).type
+  return APP_ERROR_TYPES.includes(type as AppError["type"])
 }
 
-function runDbOp<T>(operation: () => Promise<T>): ResultAsync<T, AppError> {
+function toAppError(error: unknown): AppError {
+  if (isAppError(error)) {
+    return error
+  }
+  if (error instanceof ZodError) {
+    return appErrors.validation(error.issues[0]?.message ?? "Validation error")
+  }
+  if (error instanceof DrizzleQueryError) {
+    return appErrors.persistence(error)
+  }
+  if (error instanceof Error && error.name === "ValidationError") {
+    return appErrors.validation(error.message)
+  }
+  return appErrors.unexpected(error)
+}
+
+function runSafe<T>(operation: AsyncOperation<T>): AppResult<T> {
   return fromPromise(operation(), toAppError)
 }
 
-function getAuthUser(): ResultAsync<User, AppError> {
-  return fromPromise(getServerSession(), appErrors.unexpected).andThen(
-    (session) =>
-      session?.user
-        ? okAsync(session.user)
-        : errAsync(appErrors.unauthenticated()),
+function getAuthUser(): AppResult<User> {
+  return runSafe(getServerSession).andThen((session) =>
+    session?.user
+      ? okAsync(session.user)
+      : errAsync(appErrors.unauthenticated()),
   )
 }
 
-async function toResult<T>(
-  result: ResultAsync<T, AppError>,
+async function toSerializedResult<T>(
+  result: AppResult<T>,
 ): Promise<SerializedResult<T>> {
   return await result.match(
     (data) => ({ success: true as const, data }),
@@ -86,68 +108,59 @@ async function toResult<T>(
   )
 }
 
-function invalidateTags(tags: string[]) {
-  for (const tag of tags) {
-    updateTag(tag)
+function ensureOwnedResource<TResource>(options: {
+  resource: TResource | null | undefined
+  ownerId: (resource: TResource) => string
+  userId: string
+  entity: string
+}): AppResult<TResource> {
+  const { resource, ownerId, userId, entity } = options
+
+  if (!resource) {
+    return errAsync(appErrors.notFound(entity))
   }
+
+  if (ownerId(resource) !== userId) {
+    return errAsync(appErrors.unauthorized())
+  }
+
+  return okAsync(resource)
 }
 
 export async function publicAction<T>(
-  action: () => Promise<T>,
+  action: AsyncOperation<T>,
 ): Promise<SerializedResult<T>> {
-  return await toResult(runDbOp(action))
+  return await toSerializedResult(runSafe(action))
 }
 
 export async function authAction<T>(
   action: (user: User) => Promise<T>,
-  options?: { invalidate?: string[] | ((data: T) => string[]) },
 ): Promise<SerializedResult<T>> {
-  const result = getAuthUser().andThen((user) =>
-    runDbOp(() => action(user)).andThen((data) => {
-      if (options?.invalidate) {
-        const tags =
-          typeof options.invalidate === "function"
-            ? options.invalidate(data)
-            : options.invalidate
-        invalidateTags(tags)
-      }
-      return okAsync(data)
-    }),
-  )
+  const result = getAuthUser().andThen((user) => runSafe(() => action(user)))
 
-  return await toResult(result)
+  return await toSerializedResult(result)
 }
 
 export async function ownedAction<TResource, TResult>(options: {
-  fetch: () => Promise<TResource | null | undefined>
+  fetch: AsyncOperation<TResource | null | undefined>
   ownerId: (resource: TResource) => string
   action: (resource: TResource, user: User) => Promise<TResult>
   entity?: string
-  invalidate?: string[] | ((data: TResult, resource: TResource) => string[])
 }): Promise<SerializedResult<TResult>> {
   const { entity = "resource" } = options
 
   const result = getAuthUser().andThen((user) =>
-    runDbOp(options.fetch).andThen((resource) => {
-      if (!resource) {
-        return errAsync(appErrors.notFound(entity))
-      }
-      if (options.ownerId(resource) !== user.id) {
-        return errAsync(appErrors.unauthorized())
-      }
-
-      return runDbOp(() => options.action(resource, user)).andThen((data) => {
-        if (options.invalidate) {
-          const tags =
-            typeof options.invalidate === "function"
-              ? options.invalidate(data, resource)
-              : options.invalidate
-          invalidateTags(tags)
-        }
-        return okAsync(data)
-      })
-    }),
+    runSafe(options.fetch).andThen((resource) =>
+      ensureOwnedResource({
+        resource,
+        ownerId: options.ownerId,
+        userId: user.id,
+        entity,
+      }).andThen((ownedResource) =>
+        runSafe(() => options.action(ownedResource, user)),
+      ),
+    ),
   )
 
-  return await toResult(result)
+  return await toSerializedResult(result)
 }

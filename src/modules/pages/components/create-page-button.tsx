@@ -1,5 +1,6 @@
 "use client"
 
+import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { toast } from "sonner"
 import type { z } from "zod"
@@ -20,6 +21,7 @@ import { createPage } from "../actions"
 import { createPageSchema, emptyContent } from "../schema"
 
 export const CreatePageButton = ({ bookId }: { bookId: string }) => {
+  const router = useRouter()
   const [isOpen, setIsOpen] = useState(false)
 
   const form = useAppForm({
@@ -42,7 +44,8 @@ export const CreatePageButton = ({ bookId }: { bookId: string }) => {
           bookId,
         })
         if (response.success) {
-          toast.success("Book created successfully")
+          toast.success("Page created successfully")
+          router.refresh()
           setIsOpen(!isOpen)
           form.reset()
           return

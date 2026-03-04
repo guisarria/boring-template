@@ -10,7 +10,7 @@ import { UserCard } from "@/modules/users/components/user-card"
 export default async function Page() {
   const { ...session } = await getServerSession()
   const activeSessions = await getServerActiveSessions()
-  const userSettings = await getUserSettings(session.user.id)
+  const userSettings = await getUserSettings()
 
   return (
     <div className="container relative mx-auto flex h-full flex-col items-center justify-center">

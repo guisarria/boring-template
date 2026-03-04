@@ -2,7 +2,7 @@
 
 import { eq } from "drizzle-orm"
 import { cache } from "react"
-import { ownedAction, publicAction } from "@/core/dal"
+import { authAction, ownedAction } from "@/core/dal"
 import { db } from "@/db"
 import { books } from "@/modules/books/schema"
 import {
@@ -26,7 +26,6 @@ export async function createPage(values: InsertPage) {
         .values({ ...parsed, bookId: values.bookId })
         .returning({ id: pages.id })
     },
-    invalidate: [`books:${values.bookId}`],
   })
 }
 
@@ -35,12 +34,16 @@ export const getPageById = cache(
     id: string,
     columns: T,
   ) => {
-    return await publicAction(async () => {
+    return await authAction(async (user) => {
       const page = await db.query.pages.findFirst({
         where: eq(pages.id, id),
         columns,
         with: { book: true },
       })
+
+      if (page?.book && page.book.userId !== user.id && !page.book.isPublic) {
+        return { page: undefined }
+      }
 
       return { page }
     })
@@ -59,7 +62,6 @@ export async function updatePage(id: string, values: Partial<InsertPage>) {
       const parsed = updatePageSchema.parse(values)
       await db.update(pages).set(parsed).where(eq(pages.id, id))
     },
-    invalidate: (_, resource) => [`books:${resource.book.id}`, `pages:${id}`],
   })
 }
 
@@ -75,7 +77,6 @@ export async function updatePageContent(id: string, content: unknown) {
       const parsed = contentSchema.parse(content)
       await db.update(pages).set({ content: parsed }).where(eq(pages.id, id))
     },
-    invalidate: [`pages:${id}`],
   })
 }
 
@@ -92,6 +93,5 @@ export async function deletePage(id: string) {
         .delete(pages)
         .where(eq(pages.id, id))
         .returning({ id: pages.id }),
-    invalidate: [`pages:${id}`],
   })
 }

@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/sidebar"
 import { cn } from "@/lib/utils"
 import { getServerSession } from "@/modules/auth/server"
-import { getUserBooks } from "@/modules/books/actions"
+import { getSidebarBooks } from "@/modules/books/actions"
 import { SidebarData, SidebarLogo } from "./sidebar-data"
 
 export function AppSidebar({ ...props }: ComponentProps<typeof Sidebar>) {
@@ -51,7 +51,7 @@ export function AppSidebar({ ...props }: ComponentProps<typeof Sidebar>) {
 }
 
 const SidebarContentData = async () => {
-  const result = await getUserBooks()
+  const result = await getSidebarBooks()
 
   if (!result.success) {
     return <SidebarContent />

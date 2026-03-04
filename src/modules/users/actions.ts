@@ -7,7 +7,6 @@ import { cache } from "react"
 import { authAction, publicAction } from "@/core/dal"
 import { db } from "@/db"
 import { users } from "@/modules/auth/schema"
-import type { User } from "@/modules/auth/types"
 import { getServerSession } from "../auth/server"
 import { userSettings } from "./schema"
 
@@ -29,17 +28,17 @@ export async function gerCurrentUser() {
   return currentUser
 }
 
-export async function getUserSettings(userId: string) {
-  return await authAction(async () => {
+export async function getUserSettings() {
+  return await authAction(async (user) => {
     return await db
       .select()
       .from(userSettings)
-      .where(eq(userSettings.userId, userId))
+      .where(eq(userSettings.userId, user.id))
   })
 }
 
-export async function updatePublicUserSettings(user: User, isPrivate: boolean) {
-  return await authAction(async () => {
+export async function updatePublicUserSettings(isPrivate: boolean) {
+  return await authAction(async (user) => {
     return await db
       .update(userSettings)
       .set({ privateAccount: isPrivate })

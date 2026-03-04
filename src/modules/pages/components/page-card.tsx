@@ -1,10 +1,9 @@
 "use client"
 
-import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { GlobeIcon, LockIcon, Trash2 } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { useState, useTransition } from "react"
 import { toast } from "sonner"
 import {
   AlertDialog,
@@ -32,30 +31,26 @@ import { deletePage } from "@/modules/pages/actions"
 import type { Page } from "@/modules/pages/schema"
 
 type PageCardProps = {
-  page: Page
+  page: Pick<Page, "id" | "title" | "bookId" | "isPublic" | "updatedAt">
 }
 
 export function PageCard({ page }: PageCardProps) {
   const [isOpen, setIsOpen] = useState(false)
-  const queryClient = useQueryClient()
+  const [isPending, startTransition] = useTransition()
   const router = useRouter()
 
-  const { isPending, mutateAsync: handleDeletePage } = useMutation({
-    mutationFn: deletePage,
-    mutationKey: ["page", page.id],
-    onSuccess: () => {
-      toast.success("Page deleted successfully")
-      queryClient.invalidateQueries({ queryKey: ["user-books"] })
-      queryClient.invalidateQueries({ queryKey: ["pages", page.bookId] })
-      router.refresh()
-    },
-    onError: () => {
-      toast.error("Failed to delete page")
-    },
-    onSettled: () => {
+  const handleDeletePage = (id: string) => {
+    startTransition(async () => {
+      const result = await deletePage(id)
+      if (result.success) {
+        toast.success("Page deleted successfully")
+        router.refresh()
+      } else {
+        toast.error("Failed to delete page")
+      }
       setIsOpen(false)
-    },
-  })
+    })
+  }
 
   return (
     <Card className={cn("w-3xs")}>

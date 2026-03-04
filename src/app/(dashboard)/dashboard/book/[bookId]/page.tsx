@@ -3,7 +3,6 @@ import { assertSuccess } from "@/core/dal"
 import { getBookById } from "@/modules/books/actions"
 import { CreatePageButton } from "@/modules/pages/components/create-page-button"
 import { PageCard } from "@/modules/pages/components/page-card"
-import type { Page as BookPage } from "@/modules/pages/schema"
 
 type Params = Promise<{
   bookId: string
@@ -41,7 +40,7 @@ export default async function Page({ params }: { params: Params }) {
       </div>
 
       <div className="mx-auto flex w-full flex-wrap gap-8">
-        {book?.pages?.map((page: BookPage) => (
+        {book?.pages?.map((page) => (
           <PageCard key={page.id} page={page} />
         ))}
       </div>

@@ -2,6 +2,7 @@
 
 import { useForm } from "@tanstack/react-form"
 import { Pencil } from "lucide-react"
+import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { toast } from "sonner"
 import type { z } from "zod"
@@ -34,15 +35,14 @@ type EditBookDialogProps = {
   bookId: string
   bookName: string
   bookIsPublic: boolean
-  onSuccessAction?: () => void
 }
 
 export function EditBookDialog({
   bookId,
   bookName,
   bookIsPublic,
-  onSuccessAction,
 }: EditBookDialogProps) {
+  const router = useRouter()
   const [isEditing, setIsEditing] = useState(false)
 
   const form = useForm({
@@ -67,7 +67,7 @@ export function EditBookDialog({
         return
       }
       toast.success("Book updated successfully")
-      onSuccessAction?.()
+      router.refresh()
       setIsEditing(false)
     },
   })

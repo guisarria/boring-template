@@ -73,10 +73,7 @@ function UserCard({ session, activeSessions, privateAccount }: UserCardProps) {
             <Field>
               <FieldLabel className="inline-flex shrink-0 select-none items-center justify-center whitespace-nowrap rounded-lg border border-border bg-background bg-clip-padding p-4 font-medium text-sm outline-none transition-all hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 has-data-checked:border-border has-data-checked:bg-border aria-invalid:border-destructive aria-invalid:ring-[3px] aria-invalid:ring-destructive/20 dark:border-input dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 dark:has-data-checked:bg-input/30 dark:hover:bg-input/50 [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0">
                 Make Account Private
-                <PrivacySwitch
-                  initialPrivateAccount={privateAccount}
-                  user={user}
-                />
+                <PrivacySwitch initialPrivateAccount={privateAccount} />
               </FieldLabel>
             </Field>
           </div>
