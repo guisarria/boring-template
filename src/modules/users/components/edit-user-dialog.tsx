@@ -2,7 +2,6 @@
 
 import { Edit, X } from "lucide-react"
 import Image from "next/image"
-import { useRouter } from "next/navigation"
 import { useState, useTransition } from "react"
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
@@ -32,7 +31,6 @@ function convertImageToBase64(file: File): Promise<string> {
 
 export function EditUserDialog({ user }: { user: User }) {
   const [name, setName] = useState<string>()
-  const router = useRouter()
   const [image, setImage] = useState<File | null>(null)
   const [imagePreview, setImagePreview] = useState<string | null>(null)
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -133,7 +131,6 @@ export function EditUserDialog({ user }: { user: User }) {
                 })
                 startTransition(() => {
                   setName("")
-                  router.refresh()
                   setImage(null)
                   setImagePreview(null)
                   setOpen(false)

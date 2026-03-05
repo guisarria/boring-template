@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/card"
 import { FieldSeparator, FieldSet } from "@/components/ui/field"
 import { cn } from "@/lib/utils"
-import { signUpUser } from "../actions"
+import { authClient } from "../auth-client"
 import { type SignUp, signUpSchema } from "../validations/sign-up"
 import { SocialAuthButtons } from "./social-auth-buttons"
 
@@ -37,13 +37,21 @@ export function SignUpForm() {
     },
     onSubmit: ({ value }) => {
       startTransition(async () => {
-        const response = await signUpUser(value)
-        if (response.success) {
-          toast.success("Signed up successfully!")
-          form.reset()
-          router.push("/dashboard")
-          return
-        }
+        await authClient.signUp.email({
+          name: value.name,
+          email: value.email,
+          password: value.password,
+          callbackURL: "/dashboard",
+          fetchOptions: {
+            onSuccess: () => {
+              toast.success("Sign up successfully")
+              router.push("/dashboard")
+            },
+            onError: ({ error }) => {
+              toast.error(error.message)
+            },
+          },
+        })
       })
     },
   })

@@ -2,7 +2,6 @@
 
 import { GlobeIcon, LockIcon, Trash2 } from "lucide-react"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
 import { useState, useTransition } from "react"
 import { toast } from "sonner"
 import {
@@ -37,14 +36,12 @@ type PageCardProps = {
 export function PageCard({ page }: PageCardProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [isPending, startTransition] = useTransition()
-  const router = useRouter()
 
   const handleDeletePage = (id: string) => {
     startTransition(async () => {
       const result = await deletePage(id)
       if (result.success) {
         toast.success("Page deleted successfully")
-        router.refresh()
       } else {
         toast.error("Failed to delete page")
       }

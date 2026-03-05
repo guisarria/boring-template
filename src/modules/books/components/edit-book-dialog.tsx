@@ -2,7 +2,6 @@
 
 import { useForm } from "@tanstack/react-form"
 import { Pencil } from "lucide-react"
-import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { toast } from "sonner"
 import type { z } from "zod"
@@ -42,7 +41,6 @@ export function EditBookDialog({
   bookName,
   bookIsPublic,
 }: EditBookDialogProps) {
-  const router = useRouter()
   const [isEditing, setIsEditing] = useState(false)
 
   const form = useForm({
@@ -67,7 +65,6 @@ export function EditBookDialog({
         return
       }
       toast.success("Book updated successfully")
-      router.refresh()
       setIsEditing(false)
     },
   })

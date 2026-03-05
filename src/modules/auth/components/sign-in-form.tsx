@@ -1,7 +1,6 @@
 "use client"
 
 import Link from "next/link"
-import { useRouter } from "next/navigation"
 import { useTransition } from "react"
 import { toast } from "sonner"
 import { useAppForm } from "@/components/forms/form-context"
@@ -16,12 +15,11 @@ import {
 } from "@/components/ui/card"
 import { FieldSeparator, FieldSet } from "@/components/ui/field"
 import { cn } from "@/lib/utils"
-import { signInUser } from "../actions"
+import { authClient } from "../auth-client"
 import { type SignIn, signInSchema } from "../validations/sign-in"
 import { SocialAuthButtons } from "./social-auth-buttons"
 
 export function SignInForm() {
-  const router = useRouter()
   const [isPending, startTransition] = useTransition()
 
   const form = useAppForm({
@@ -34,13 +32,19 @@ export function SignInForm() {
     },
     onSubmit: ({ value }) => {
       startTransition(async () => {
-        const response = await signInUser(value)
-        if (response.success) {
-          toast.success("Signed in successfully!")
-          form.reset()
-          router.push("/dashboard")
-          return
-        }
+        await authClient.signIn.email({
+          email: value.email,
+          password: value.password,
+          callbackURL: "/dashboard",
+          fetchOptions: {
+            onSuccess: () => {
+              toast.success("Logged in successfully")
+            },
+            onError: ({ error }) => {
+              toast.error(error.message)
+            },
+          },
+        })
       })
     },
   })

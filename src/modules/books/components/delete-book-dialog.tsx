@@ -1,7 +1,6 @@
 "use client"
 
 import { Trash2 } from "lucide-react"
-import { useRouter } from "next/navigation"
 import { useState, useTransition } from "react"
 import { toast } from "sonner"
 import {
@@ -29,7 +28,6 @@ export function DeleteBookDialog({
   bookName,
   pagesCount,
 }: DeleteBookDialogProps) {
-  const router = useRouter()
   const [isOpen, setIsOpen] = useState(false)
   const [isPending, startTransition] = useTransition()
   const pageLabel = pagesCount === 1 ? "page" : "pages"
@@ -39,7 +37,6 @@ export function DeleteBookDialog({
       const result = await deleteBookById(data)
       if (result.success) {
         toast.success("Book deleted successfully")
-        router.refresh()
         setIsOpen(false)
       } else {
         toast.error("Failed to delete book")
